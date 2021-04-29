@@ -5,5 +5,12 @@ export default {
         return request({
             url: '/crm/companies/'
         })
+    },
+    getClientMessage(data) {
+        return request({
+            url: '',
+            method: 'post',
+            data: data,
+        })
     }
 }
