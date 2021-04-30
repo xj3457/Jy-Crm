@@ -8,7 +8,7 @@ export default {
     },
     getClientMessage(data) {
         return request({
-            url: '',
+            url: '/crm/staff_all',
             method: 'post',
             data: data,
         })
