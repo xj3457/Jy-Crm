@@ -7,13 +7,16 @@ export function request(config) {
 	})
 
 	// 请求拦截器
-	// interface1.interceptors.request.use(config => {
-	// 	console.log(config);
-	// 	return config
-	// }, err => {
-	// 	console.log(err);
-	// 	return err
-	// })
+	interface1.interceptors.request.use(config => {
+		let request_url = config.url.charAt(config.url.length - 1)
+        if (request_url != "/") {
+            config.url += "/"
+        }
+		return config;
+	}, err => {
+		console.log(err);
+		return err
+	})
 	// 响应拦截器
 	// interface1.interceptors.response.use(res => {
 	// 	console.log(res);

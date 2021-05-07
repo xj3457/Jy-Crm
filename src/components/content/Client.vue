@@ -28,25 +28,25 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
+                    <tr v-for="item in staffData" :key="item.name">
                         <el-row>
-                            <el-col :span="4">
-                                <td>Tome</td>
+                            <el-col :span="4" v-if="item.name != undefined">
+                                <td>{{ item.name }}</td>
                             </el-col>
-                            <el-col :span="4">
-                                <td>研发部</td>
+                            <el-col :span="4" v-if="item.department != undefined">
+                                <td>{{ item.department }}</td>
                             </el-col>
-                            <el-col :span="4">
-                                <td>开发</td>
+                            <el-col :span="4" v-if="item.position != undefined">
+                                <td>{{ item.position }}</td>
                             </el-col>
-                            <el-col :span="4">
-                                <td>6427574920</td>
+                            <el-col :span="4" v-if="item.telephone != undefined">
+                                <td>{{ item.telephone }}</td>
                             </el-col>
-                            <el-col :span="4">
-                                <td>1263827932</td>
+                            <el-col :span="4" v-if="item.mobilephone != undefined">
+                                <td>{{ item.mobilephone }}</td>
                             </el-col>
-                            <el-col :span="4">
-                                <td>tom1278@gmail.com</td>
+                            <el-col :span="4" v-if="item.email != undefined">
+                                <td>{{ item.email }}</td>
                             </el-col>
                         </el-row>
                     </tr>
@@ -61,7 +61,8 @@
 export default {
     name: "Client",
     props: [
-        'dataObj'
+        'dataObj',
+        'staffData'
     ]
 }
 </script>

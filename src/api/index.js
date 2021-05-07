@@ -1,12 +1,14 @@
 import {request} from "@/network/request";
 
 export default {
-    getCompanies() {
+    getCompanies(data) {
         return request({
-            url: '/crm/companies/'
+            url: '/crm/companies',
+            method: 'post',
+            data: data
         })
     },
-    getClientMessage(data) {
+    getStaffData(data) {
         return request({
             url: '/crm/staff_all',
             method: 'post',
