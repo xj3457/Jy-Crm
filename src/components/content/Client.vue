@@ -6,23 +6,23 @@
                     <thead>
                     <tr>
                         <el-row>
-                            <el-col :span="4">
-                                <td>姓名</td>
+                            <el-col :span="4" v-if="tableHeads.name != undefined">
+                                <td>{{ tableHeads.name }}</td>
                             </el-col>
-                            <el-col :span="4">
-                                <td>部门</td>
+                            <el-col :span="4" v-if="tableHeads.department != undefined">
+                                <td>{{ tableHeads.department }}</td>
                             </el-col>
-                            <el-col :span="4">
-                                <td>职务</td>
+                            <el-col :span="4" v-if="tableHeads.position != undefined">
+                                <td>{{ tableHeads.position }}</td>
                             </el-col>
-                            <el-col :span="4">
-                                <td>座机</td>
+                            <el-col :span="4" v-if="tableHeads.telephone != undefined">
+                                <td>{{ tableHeads.telephone }}</td>
                             </el-col>
-                            <el-col :span="4">
-                                <td>手机</td>
+                            <el-col :span="4" v-if="tableHeads.mobilephone != undefined">
+                                <td>{{ tableHeads.mobilephone }}</td>
                             </el-col>
-                            <el-col :span="4">
-                                <td>邮箱</td>
+                            <el-col :span="4" v-if="tableHeads.email != undefined">
+                                <td>{{ tableHeads.email }}</td>
                             </el-col>
                         </el-row>
                     </tr>
@@ -62,7 +62,8 @@ export default {
     name: "Client",
     props: [
         'dataObj',
-        'staffData'
+        'staffData',
+        'tableHeads'
     ]
 }
 </script>
@@ -71,7 +72,9 @@ export default {
 
 .transition-box table {
     width: 100%;
-    padding: 0 12% 0 7%;
+    padding: 0 12% 0 8%;
+    border-top: 1px solid #DCDFE6;
+    border-bottom: 1px solid #DCDFE6;
 
     td {
         width: 1%;

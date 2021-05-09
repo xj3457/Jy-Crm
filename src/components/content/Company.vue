@@ -2,7 +2,7 @@
     <div>
         <el-card>
             <el-row :gutter="20">
-                <el-col :span="8" :offset="4">
+                <el-col :span="8" :offset="6">
                     <el-input placeholder="请输入内容">
                         <el-button slot="append" icon="el-icon-search"></el-button>
                     </el-input>
@@ -25,10 +25,7 @@
                                         </el-col>
                                     </el-row>
                                     <el-row>
-                                        <el-col :xs="24" :md="8" class="company-message">{{
-                                                item.english_name
-                                            }}
-                                        </el-col>
+                                        <el-col :xs="24" :md="8" class="company-message">{{ item.english_name }}</el-col>
                                         <el-col :xs="24" :sm="8" class="company-message">性质：{{ item.nature }}</el-col>
                                         <el-col :xs="24" :sm="8" class="company-message">城市：{{ item.city }}</el-col>
                                     </el-row>
@@ -37,12 +34,25 @@
                                     </el-row>
                                 </td>
                             </tr>
+                            <tr>
+                                <el-button type="primary">添加员工</el-button>
+                            </tr>
                             <tr class="client_message">
                                 <div>
-                                    <Client :dataObj="show_staff" :staffData="staff_data"
-                                            v-if="is_show_component == item.name"/>
+                                    <Client :dataObj="show_staff" :staffData="staff_data" :tableHeads="table_heads" v-if="is_show_component == item.name"/>
                                 </div>
                             </tr>
+                        </div>
+                        <div>
+                            <el-pagination
+                                @size-change="handleSizeChange"
+                                @current-change="handleCurrentChange"
+                                :current-page="query_info.page_num"
+                                :page-sizes="[5, 10, 15, 20]"
+                                :page-size="query_info.page_size"
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :total="6">
+                            </el-pagination>
                         </div>
                         </tbody>
                     </table>
@@ -64,7 +74,9 @@ export default {
     methods: {
         getCompaniesList() {
             API.getCompanies(this.query_info).then(res => {
-                this.companies = res.data
+                console.log(res.data)
+                this.companies = res.data[0]
+                this.table_heads = res.data[1][0]
             }).catch(err => {
                 this.$message('无法获取数据！' + err)
             })
@@ -81,6 +93,14 @@ export default {
             }).catch(err => {
                 this.$message('无法获取数据！' + err)
             })
+        },
+        handleSizeChange(newSize) {
+            this.query_info.page_size = newSize
+            this.getCompaniesList()
+        },
+        handleCurrentChange(newPage) {
+            this.query_info.page_num = newPage
+            this.getCompaniesList()
         }
     },
     components: {
@@ -91,13 +111,14 @@ export default {
             query_info: {
                 query: '',
                 page_num: 1,
-                page_size: 10,
+                page_size: 3,
             },
             companies: [],
             total: 0,
             show_staff: false,
             is_show_component: '',
             staff_data: '',
+            table_heads: '',
         }
     },
 }
@@ -107,8 +128,9 @@ export default {
 .search-cell {
     width: 100%;
     border: 1px solid #DCDFE6;
-    border-collapse: collapse;
-    border-radius: 4px !important;
+    border-collapse: separate;
+    border-radius: 4px;
+    margin-top: 1%;
 
     tr {
         cursor: pointer;

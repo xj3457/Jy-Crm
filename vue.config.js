@@ -15,7 +15,7 @@ module.exports = {
     devServer: {
         proxy: {
             '/api': {
-                target: 'http://127.0.0.1:8000', // 后台请求地址
+                target: 'http://192.168.1.116:8000', // 后台请求地址
                 ws: true,
                 changeOrigin: true,
                 pathRewrite: {
