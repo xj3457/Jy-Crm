@@ -2,7 +2,6 @@ import {request} from "@/network/request";
 
 export default {
     getCompanies(data) {
-        console.log(data);
         return request({
             url: '/crm/companies',
             method: 'get',
