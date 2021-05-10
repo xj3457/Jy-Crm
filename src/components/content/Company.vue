@@ -2,13 +2,16 @@
     <div>
         <el-card>
             <el-row :gutter="20">
-                <el-col :span="8" :offset="7">
-                    <el-input placeholder="请输入内容">
+                <el-col :span="8" :offset="5">
+                    <el-input placeholder="请输入内容" :value="query_info.query" v-model="content">
                         <el-button slot="append" icon="el-icon-search"></el-button>
                     </el-input>
                 </el-col>
                 <el-col :span="4">
-                    <el-button type="primary">添加公司</el-button>
+                    <el-button type="primary" @click="searchCompany">搜索</el-button>
+                </el-col>
+                <el-col :span="4">
+                    <el-button type="primary" @click="addCompany">添加公司</el-button>
                 </el-col>
             </el-row>
             <el-row>
@@ -27,8 +30,8 @@
                                     <el-row>
                                         <el-col :span="8" class="company-message">{{ item.english_name }}</el-col>
                                         <el-col :span="8" class="company-message">性质：{{ item.nature }}</el-col>
-                                        <el-col :span="4" class="company-message">城市：{{ item.city }}</el-col>
-                                        <el-button :span="4" type="primary" style="margin-top: -10px">添加员工</el-button>
+                                        <el-col :span="4" class="company-message">所在地：{{ item.city }}</el-col>
+                                        <el-button :span="4" type="primary" style="margin-top: -10px" @click.stop="addStaff(item.name)">添加员工</el-button>
                                     </el-row>
                                     <el-row>
                                         <el-col class="company-message">注册地址：{{ item.address }}</el-col>
@@ -56,21 +59,34 @@
                     </table>
                 </el-col>
             </el-row>
+            <el-row>
+                <el-dialog title="添加公司信息" :visible.sync="show_add_company" width="40%" center>
+                    <addCompany @onSubmit="handleSubmit"/>
+                </el-dialog>
+            </el-row>
+            <el-row>
+                <addStaff :showAddStaff="show_add_staff" />
+            </el-row>
         </el-card>
     </div>
 </template>
 
 <script>
-import API from '@/api/index'
-import Client from './Client'
+import API from '@/api/index.js'
+import Client from './Client.vue'
+import AddCompany from './AddCompany.vue'
+import AddStaff from './AddStaff.vue'
 
 export default {
     name: "Company",
     components: {
         Client,
+        AddCompany,
+        AddStaff,
     },
     data() {
         return {
+            content: '',
             query_info: {
                 query: '',
                 page_num: 1,
@@ -80,6 +96,8 @@ export default {
             companies: [],
             total: 0,
             show_staff: false,
+            show_add_company: false,
+            show_add_staff: false,
             is_show_component: '',
             staff_data: '',
             table_heads: '',
@@ -89,12 +107,20 @@ export default {
         this.getCompaniesList()
     },
     methods: {
+        handleSubmit() {
+            this.show_add_company = false
+        },
+        searchCompany() {
+            if (this.content != '') {
+                this.query_info.query = this.content.trim()
+                this.getCompaniesList()
+            }
+        },
         getCompaniesList() {
             API.getCompanies(this.query_info).then(res => {
                 this.total = res.data[2][0]['company_count']
                 this.companies = res.data[0]
                 this.table_heads = res.data[1][0]
-                console.log(this.companies)
             }).catch(err => {
                 this.$message('无法获取数据！' + err)
             })
@@ -104,8 +130,8 @@ export default {
                 this.show_staff = false
             }
             this.updateColor()
-            event.currentTarget.style.background = 'blue'
-            event.currentTarget.nextElementSibling.style.background = 'green'
+            event.currentTarget.style.background = 'rgba(48,182,241,0.3)'
+            event.currentTarget.nextElementSibling.style.background = '#31f23152'
             this.is_show_component = event.currentTarget.firstElementChild.innerText;
             var data = {"company_name": event.currentTarget.firstElementChild.innerText}
             API.getStaffData(data).then(res => {
@@ -128,6 +154,12 @@ export default {
             for(var i = 0; i < elList.length; i++){
                 elList[i].style.background = ''
             }
+        },
+        addStaff() {
+            console.log(11111)
+        },
+        addCompany() {
+            this.show_add_company = true
         }
     },
 }
@@ -154,5 +186,9 @@ export default {
 
 .company-message {
     margin-bottom: 1%;
+}
+
+.portait-tr {
+    font-family: Arial, Helvetica, sans-serif;
 }
 </style>
