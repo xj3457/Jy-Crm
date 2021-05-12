@@ -14,7 +14,6 @@ export function request(config) {
         }
 		return config;
 	}, err => {
-		console.log(err);
 		return err
 	})
 	// 响应拦截器
