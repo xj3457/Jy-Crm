@@ -16,7 +16,10 @@
             </el-row>
             <el-row>
                 <el-col :span="20" :offset="2">
-                    <table class="search-cell">
+                    <table class="search-cell" v-loading="loading"
+                           element-loading-text="拼命加载中"
+                           element-loading-spinner="el-icon-loading"
+                           element-loading-background="rgba(0, 0, 0, 0.8)">
                         <tbody>
                         <div style="display: contents" v-for="(item, index) in companies" :key="index">
                             <tr class="portait-tr" @click="getStaffList($event)">
@@ -61,11 +64,13 @@
             </el-row>
             <el-row>
                 <el-dialog title="添加公司信息" :visible.sync="show_add_company" width="40%" center>
-                    <addCompany @onSubmit="handleSubmit"/>
+                    <addCompany @onSubmit="handleSubmit" />
                 </el-dialog>
             </el-row>
             <el-row>
-                <addStaff :showAddStaff="show_add_staff" />
+                <el-dialog title="添加员工信息" :visible.sync="show_add_staff" width="60%" center>
+                    <addStaff @onSubmit="handleSubmit" />
+                </el-dialog>
             </el-row>
         </el-card>
     </div>
@@ -97,10 +102,11 @@ export default {
             total: 0,
             show_staff: false,
             show_add_company: false,
-            show_add_staff: false,
+            show_add_staff: true,
             is_show_component: '',
             staff_data: '',
             table_heads: '',
+            loading: false,
         }
     },
     created() {
@@ -109,18 +115,23 @@ export default {
     methods: {
         handleSubmit() {
             this.show_add_company = false
+            this.show_add_staff = false
         },
         searchCompany() {
             if (this.content != '') {
                 this.query_info.query = this.content.trim()
+                console.log(this.query_info)
+                this.loading = true
                 this.getCompaniesList()
             }
         },
         getCompaniesList() {
             API.getCompanies(this.query_info).then(res => {
+                console.log(res)
                 this.total = res.data[2][0]['company_count']
                 this.companies = res.data[0]
                 this.table_heads = res.data[1][0]
+                this.loading = false
             }).catch(err => {
                 this.$message('无法获取数据！' + err)
             })

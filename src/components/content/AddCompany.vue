@@ -1,30 +1,25 @@
 <template>
     <div>
-        <el-form :model="form">
-            <el-form-item label="公司名称" :label-width="formLabelWidth">
-                <el-input v-model="form.company_name" autocomplete="off" @blur="detectionContent($event)" @focus="detectionContent($event)"></el-input>
-                <p class="prompt" style="display: none">公司名称不能为空</p>
+        <el-form ref="addCompanyRef" :model="form" :rules="addCompanyRules">
+            <el-form-item label="公司名称" :label-width="formLabelWidth" prop="company_name">
+                <el-input v-model="form.company_name" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="英文名称" :label-width="formLabelWidth">
-                <el-input v-model="form.english_name" autocomplete="off" @blur="detectionContent($event)"></el-input>
-                <p class="prompt" style="display: none">英文名称不能为空</p>
+            <el-form-item label="英文名称" :label-width="formLabelWidth" prop="english_name">
+                <el-input v-model="form.english_name" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="公司性质" :label-width="formLabelWidth">
-                <el-input v-model="form.company_type" autocomplete="off" @blur="detectionContent($event)"></el-input>
-                <p class="prompt" style="display: none">公司性质不能为空</p>
+            <el-form-item label="公司性质" :label-width="formLabelWidth" prop="company_type">
+                <el-input v-model="form.company_type" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="公司所在地" :label-width="formLabelWidth">
-                <el-input v-model="form.company_home" autocomplete="off" @blur="detectionContent($event)"></el-input>
-                <p class="prompt" style="display: none">公司所在地不能为空</p>
+            <el-form-item label="公司所在地" :label-width="formLabelWidth" prop="company_home">
+                <el-input v-model="form.company_home" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="注册地址" :label-width="formLabelWidth">
-                <el-input v-model="form.registered_address" autocomplete="off" @blur="detectionContent($event)"></el-input>
-                <p class="prompt" style="display: none">注册地址不能为空</p>
+            <el-form-item label="注册地址" :label-width="formLabelWidth" prop="registered_address">
+                <el-input v-model="form.registered_address" autocomplete="off"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer" style="text-align: center">
             <el-button type="primary" @click="subForm">确 定</el-button>
-            <el-button @click="cancel">取 消</el-button>
+            <el-button @click="cancel">重 置</el-button>
         </div>
     </div>
 </template>
@@ -41,23 +36,83 @@ export default {
                 company_home: '',
                 registered_address: '',
             },
+            addCompanyRules: {
+                company_name: [
+                    {
+                        required: true,
+                        message: '请输入公司名称',
+                        trigger: 'blur'
+                    },
+                    {
+                        min: 3,
+                        max: 10,
+                        message: '长度在 3 到 10 个字符',
+                        trigger: 'blur'
+                    }
+                ],
+                english_name: [
+                    {
+                        required: true,
+                        message: '请输入英文名称',
+                        trigger: 'blur'
+                    },
+                    {
+                        min: 3,
+                        max: 10,
+                        message: '长度在 3 到 10 个字符',
+                        trigger: 'blur'
+                    }
+                ],
+                company_type: [
+                    {
+                        required: true,
+                        message: '请输入公司性质',
+                        trigger: 'blur'
+                    },
+                    {
+                        min: 3,
+                        max: 10,
+                        message: '长度在 3 到 10 个字符',
+                        trigger: 'blur'
+                    }
+                ],
+                company_home: [
+                    {
+                        required: true,
+                        message: '请输入公司所在地',
+                        trigger: 'blur'
+                    },
+                    {
+                        min: 3,
+                        max: 10,
+                        message: '长度在 3 到 10 个字符',
+                        trigger: 'blur'
+                    }
+                ],
+                registered_address: [
+                    {
+                        required: true,
+                        message: '请输入注册地址',
+                        trigger: 'blur'
+                    },
+                    {
+                        min: 3,
+                        max: 10,
+                        message: '长度在 3 到 10 个字符',
+                        trigger: 'blur'
+                    }
+                ],
+            },
             formLabelWidth: '120px'
         }
     },
     methods: {
         cancel() {
-            this.$emit('onSubmit')
+            this.$refs.addCompanyRef.resetFields()
         },
         subForm() {
             this.$emit('onSubmit')
         },
-        detectionContent(event) {
-            if (event.currentTarget.value == '') {
-                event.currentTarget.parentElement.nextElementSibling.style.display = 'inline'
-            } else {
-                event.currentTarget.parentElement.nextElementSibling.style.display = 'none'
-            }
-        }
     }
 }
 </script>
